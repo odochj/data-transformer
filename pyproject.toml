@@ -1,0 +1,40 @@
+[project]
+name = "data-transformer"
+version = "0.1.0"
+description = "SQLMesh project using uv"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "sqlmesh",
+    "fastapi",
+    "uvicorn[standard]",
+    "httpx",
+    "pydantic",
+    "python-dotenv",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "coverage",
+  "ruff",
+  "black",
+  "mypy",
+  "pre-commit",
+]
+
+[tool.sqlmesh]
+config = "sqlmesh.yaml"
+
+[tool.pytest.ini_options]
+pythonpath = [ "." ]
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I"]  # errors, flakes, import order
+
+[tool.black]
+line-length = 88
+
+[tool.mypy]
+strict = true
