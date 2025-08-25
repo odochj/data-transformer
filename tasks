@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+set -e  # Exit on error
+set -u  # Error on unset variables
+
+COMMAND=$1
+shift || true  # remove command from args
+
+case "$COMMAND" in
+  format)
+    echo "🧼 Formatting code with Black..."
+    uv run black .
+    ;;
+  
+  lint)
+    echo "🔍 Linting with Ruff..."
+    uv run ruff check .
+    ;;
+
+  test)
+    echo "🧪 Running tests..."
+    uv run pytest tests/
+    ;;
+
+  typecheck)
+    echo "🔎 Running mypy type check..."
+    uv run mypy scripts/
+    ;;
+
+  coverage)
+    echo "📊 Running test coverage..."
+    uv run coverage run -m pytest
+    uv run coverage report
+    ;;
+
+  all)
+    echo "🚀 Running all checks (format → lint → typecheck → test)..."
+    ./tasks format
+    ./tasks lint
+    ./tasks typecheck
+    ./tasks test
+    ;;
+
+  *)
+    echo "❌ Unknown command: $COMMAND"
+    echo "Usage: ./tasks [format|lint|test|typecheck|coverage|all]"
+    exit 1
+    ;;
+esac
