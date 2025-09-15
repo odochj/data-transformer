@@ -14,9 +14,9 @@ dependencies = [
     "pytest",
     "coverage",
     "ruff",
-    "black",
     "mypy",
     "pre-commit",
+    "requests",
 ]
 
 [tool.sqlmesh]

@@ -7,9 +7,25 @@ COMMAND=$1
 shift || true  # remove command from args
 
 case "$COMMAND" in
+    init)
+    echo "⚙️  Initializing development environment..."
+    # Create venv with uv if it doesn't exist
+    if [ ! -d ".venv" ]; then
+      uv venv
+    fi
+    source .venv/bin/activate
+
+    # Install project dependencies (idempotent)
+    uv pip install -e .
+
+    # Install pre-commit hooks and type stubs
+    uv run pre-commit install
+    uv run mypy --install-types 
+
+    ;;
   format)
-    echo "🧼 Formatting code with Black..."
-    uv run black .
+    echo "🧼 Formatting code with ruff..."
+    uv run ruff check . --fix
     ;;
   
   lint)
@@ -39,6 +55,13 @@ case "$COMMAND" in
     ./tasks lint
     ./tasks typecheck
     ./tasks test
+    ;;
+
+  pre-commit)
+    echo "🔧 Running pre-commit hooks on all files..."
+    ./tasks format
+    ./tasks lint
+    ./tasks typecheck
     ;;
 
   *)
