@@ -2,13 +2,14 @@
 
 ## Overview
 
-This project is the continuation of a thought experiment first started in [Data Ingestor](https://github.com/odochj/data-ingestor); if you're in full control of both the incoming data *and* the dimensional data model, to what extent can you automate the transformation?
+**Can you define a full-featured data model at the point of ingestion?**
 
-While _Data Ingestor_ is a *source-aligned* tool that writes data according to basic [Data Vault](https://en.wikipedia.org/wiki/Data_vault_modeling) principles, **Data Transformer** is a *model-aligned* tool with direct access to the metadata collected during the ingestion process. As such, while the **Data Ingestor** is a truly standalone tool, the **Data Transformer** is an extension of the former's capabilities. 
+While **Data Ingestor** is a *source-aligned* tool that writes data according to basic [Data Vault](https://en.wikipedia.org/wiki/Data_vault_modeling) principles, **Data Transformer** is a *model-aligned* tool with direct access to the metadata collected during the ingestion process. As such, while the **Data Ingestor** is a truly standalone tool, the **Data Transformer** is an extension of the former's capabilities. 
 
 The aim of this tool is to be able to automatically produce the following:
-1. A unified dimensional model, fed using canonical columns derived from all sources
-2. Source-aligned Data Marts where *all* data is serviced
+1. Entity-aligned Data Marts  where canonical columns are derived from *all* sources
+2. Source-aligned Data Marts where *all* data is surfaced
+3. A unified Data Model that makes querying data from any combination of these tables trivial 
 
 ## Strategy
 
@@ -18,7 +19,7 @@ In **Data Transformer**, the counterpart to **Data Ingestor**'s `Source` object 
 
 The functions defined in `api_helper.py` are used to retrieve source-aligned metadata from the **Data Ingestor API**, while `TableBuilder` takes this data to produce `Tables`; one `Fact` table and multiple `Dimensions` as per the above, and as well as multiple dimensions. Each `Table` must then be registered in the `TableRegistry`
 
-As a final step, a [SQLMesh](https://sqlmesh.readthedocs.io/en/stable/) Generator iterates over the `TableRegistry`, accessing the text stored in the `sql` attribute of each table, and saving these as SQLMesh models
+As a final step, a [SQLMesh](https://sqlmesh.readthedocs.io/en/stable/) Generator (`model_builder.py`) reads registered `Tables`, accesses the text stored in the `sql` attribute, and saves these as SQLMesh models.
 
 
 ## Quickstart (for MacOS)
