@@ -1,6 +1,8 @@
+import os
+from typing import Any, Dict, List, cast
+
 import requests
 from dotenv import load_dotenv
-import os
 
 """
 API helper functions for interacting with the data ingestor API.
@@ -9,27 +11,31 @@ API helper functions for interacting with the data ingestor API.
 load_dotenv()
 endpoint = os.getenv("INGESTOR_API")
 
-def list_sources():
+
+def list_sources() -> List[str]:
     """List all sources."""
     response = requests.get(f"{endpoint}/sources")
-    if response.status_code == 200:
-        return response.json()
-    else:
-        response.raise_for_status()
+    response.raise_for_status()
+    data = response.json()
+    sources = data.get("sources")
+    if not isinstance(sources, list) or not all(isinstance(s, str) for s in sources):
+        raise ValueError("API did not return a valid list of sources")
+    return sources
 
-def get_source_metadata(source_name):
+def get_source_metadata(source_name: str) -> Dict[str, Any]:
     """Get metadata for a specific source."""
     response = requests.get(f"{endpoint}/sources/{source_name}")
-    if response.status_code == 200:
-        return response.json()
-    else:
-        response.raise_for_status()
+    response.raise_for_status()
+    data = response.json()
+    if not isinstance(data, dict):
+        raise ValueError("API did not return a valid metadata dictionary")
+    return cast(Dict[str, Any], data)
 
-#TODO: 'Unprocessable content' error. 
-def ingest_sources(sources: list):
+def ingest_sources(sources: List[str]) -> Dict[str, Any]:
     """Ingest a list of sources."""
     response = requests.post(f"{endpoint}/run", json={"sources": sources})
-    if response.status_code == 200:
-        return response.json()
-    else:
-        response.raise_for_status()
+    response.raise_for_status()
+    data = response.json()
+    if not isinstance(data, dict):
+        raise ValueError("API did not return a valid ingestion result dictionary")
+    return cast(Dict[str, Any], data)
