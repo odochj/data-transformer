@@ -4,7 +4,7 @@
 
 **Can you define a full-featured data model at the point of ingestion?**
 
-While **Data Ingestor** is a *source-aligned* tool that writes data according to basic [Data Vault](https://en.wikipedia.org/wiki/Data_vault_modeling) principles, **Data Transformer** is a *model-aligned* tool with direct access to the metadata collected during the ingestion process. As such, while the **Data Ingestor** is a truly standalone tool, the **Data Transformer** is an extension of the former's capabilities. 
+While [**Data Ingestor**](https://github.com/odochj/data-ingestor) is a *source-aligned* tool that writes data according to basic [Data Vault](https://en.wikipedia.org/wiki/Data_vault_modeling) principles, **Data Transformer** is a *model-aligned* tool with direct access to the metadata collected during the ingestion process. As such, while the **Data Ingestor** is a truly standalone tool, the **Data Transformer** is an extension of the former's capabilities. 
 
 The aim of this tool is to be able to automatically produce the following:
 1. Entity-aligned Data Marts  where canonical columns are derived from *all* sources
